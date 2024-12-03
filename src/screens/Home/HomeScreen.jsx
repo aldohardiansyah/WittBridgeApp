@@ -4,9 +4,20 @@ import DashboardCard from '../../components/DashboardCard';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import CustomImage from '../../components/Image';
+import Checkbox from '../../components/Checkbox';
+import RadioGroup from '../../components/RadioGroupButton';
+import Divider from '../../components/Divider';
 
 export default function HomeScreen() {
   const [value, setValue] = useState('');
+  const [checked, setChecked] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('option1');
+
+  const options = [
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+  ];
 
   return (
     <ScrollView style={styles.container}>
@@ -107,6 +118,52 @@ export default function HomeScreen() {
           style={styles.image}
           errorText="Unable to load image"
         />
+
+      {/* Basic Checkbox */}
+      <Checkbox
+        label="Default Checkbox"
+        isChecked={checked}
+        onPress={(isChecked) => setChecked(isChecked)}
+        color="#6A11CB"
+      />
+
+      {/* Customized Checkbox */}
+      <Checkbox
+        label="Custom Checkbox"
+        isChecked={true}
+        size={30}
+        color="#34D399"
+        labelStyle={{ fontSize: 18, color: '#000' }}
+      />
+
+      {/* Unchecked Checkbox */}
+      <Checkbox
+        label="Unchecked Checkbox"
+        isChecked={false}
+        color="#FF6B6B"
+      />
+
+      <Text style={styles.text}>
+        {checked ? 'Checkbox is Checked' : 'Checkbox is Unchecked'}
+      </Text>
+
+      <View>
+      <Divider color={'gray'} thickness={2} type="solid" length="100%" />
+
+      <Text style={styles.header}>Select an Option:</Text>
+      {/* Using RadioGroup */}
+      <RadioGroup
+        options={options}
+        selectedValue={selectedOption}
+        onValueChange={(value) => setSelectedOption(value)}
+        size={24}
+        color="#6A11CB"
+      />
+
+      <Text style={styles.text}>
+        Selected: {selectedOption}
+      </Text>
+    </View>
       </View>
     </ScrollView>
   );
