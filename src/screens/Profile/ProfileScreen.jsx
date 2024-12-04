@@ -1,8 +1,16 @@
-import React from 'react';
-import {Text, View, StyleSheet, StatusBar} from 'react-native';
-import DashboardCard from '../../components/DashboardCard';
+import React, {useContext} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+import {AuthContext} from '../../context/AuthContext';
 
 export default function ProfileScreen() {
+  const {logout} = useContext(AuthContext);
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -12,7 +20,11 @@ export default function ProfileScreen() {
       />
       <View style={styles.widgetContainer}>
         <View style={styles.widgetGreeting}>
-        <Text style={styles.widgetText}>Profile</Text>
+          <Text style={styles.widgetText}>Profile</Text>
+
+          <TouchableOpacity style={styles.button} onPress={logout}>
+            <Text style={styles.buttonText}>Logout</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -26,14 +38,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#e5e7eb',
   },
   widgetContainer: {
-    display:'flex',
-    alignItems:'center',
+    display: 'flex',
+    alignItems: 'center',
     paddingTop: 80,
     paddingHorizontal: 20,
     backgroundColor: '#e5e7eb',
   },
   widgetGreeting: {
-    width:'100%',
+    width: '100%',
   },
   widgetText: {
     fontSize: 20,
