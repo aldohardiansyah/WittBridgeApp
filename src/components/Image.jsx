@@ -3,11 +3,11 @@ import { View, Image, ActivityIndicator, StyleSheet, Text } from 'react-native';
 
 const CustomImage = ({
   source, // Main image source
-  fallbackSource, // Fallback image source
+  fallbackSource = require('../assets/images/no-data.png'), // Optional fallback image source
   style, // Custom image styles
-  loadingIndicator = true, // Show loading spinner while loading
+  loadingIndicator = true, // Show loading spinner
   resizeMode = 'cover', // Resize mode
-  errorText = 'Image failed to load', // Error message
+  errorText = 'Image not available', // Error message
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showFallback, setShowFallback] = useState(false);
@@ -19,15 +19,21 @@ const CustomImage = ({
 
   const handleError = () => {
     setIsLoading(false);
-    setShowFallback(true);
+    if (fallbackSource) {
+      setShowFallback(true); // Use provided fallback
+    } else {
+      setShowFallback(false); // Use default fallback
+    }
   };
 
   return (
     <View style={[styles.container, style]}>
+      {/* Loading Indicator */}
       {isLoading && loadingIndicator && (
-        <ActivityIndicator style={styles.loading} size="small" color="#6A11CB" />
+        <ActivityIndicator style={styles.loading} size="small" color="#54408C" />
       )}
 
+      {/* Main Image or Fallback */}
       {!showFallback ? (
         <Image
           source={source}
@@ -36,13 +42,17 @@ const CustomImage = ({
           onLoad={handleLoad}
           onError={handleError}
         />
-      ) : fallbackSource ? (
+      ) : (
         <Image
-          source={fallbackSource}
+          source={fallbackSource} // Use fallback or built-in default
           style={[styles.image, style]}
           resizeMode={resizeMode}
+          onError={() => setShowFallback(false)} // Handle error for default fallback
         />
-      ) : (
+      )}
+
+      {/* Error Text if All Fails */}
+      {!isLoading && !source && !fallbackSource && (
         <Text style={styles.errorText}>{errorText}</Text>
       )}
     </View>
@@ -67,6 +77,7 @@ const styles = StyleSheet.create({
     color: '#DC2626',
     fontSize: 12,
     textAlign: 'center',
+    marginTop: 5,
   },
 });
 

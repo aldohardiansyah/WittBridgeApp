@@ -25,7 +25,7 @@ const LoginScreen = () => {
     const isSuccess = login(email, password);
 
     if (!isSuccess) {
-      Alert.alert('Login Failed', 'Invalid email or password');
+        Alert.alert('Login Success', 'Welcome');
     }
   };
 
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
-    color: '#6A11CB',
+    color: '#54408C',
   },
   input: {
     height: 50,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#6A11CB',
+    backgroundColor: '#54408C',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',

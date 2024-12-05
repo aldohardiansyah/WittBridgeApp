@@ -7,7 +7,7 @@ const Checkbox = ({
   isChecked = false, // Initial checked state
   onPress, // Callback function when pressed
   size = 24, // Size of the checkbox icon
-  color = '#6A11CB', // Color of the checkbox when checked
+  color = '#54408C', // Color of the checkbox when checked
   labelStyle, // Custom styles for the label
   style, // Custom styles for the checkbox container
 }) => {

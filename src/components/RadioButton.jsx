@@ -6,7 +6,7 @@ const RadioButton = ({
   selected = false, // Whether the radio button is selected
   onPress, // Callback function when pressed
   size = 24, // Size of the radio button
-  color = '#6A11CB', // Color of the selected circle
+  color = '#54408C', // Color of the selected circle
   labelStyle, // Custom styles for the label
   style, // Custom styles for the radio button container
 }) => {

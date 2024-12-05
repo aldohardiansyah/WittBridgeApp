@@ -1,115 +1,99 @@
 import React from 'react';
-import {TouchableOpacity, Text, StyleSheet} from 'react-native';
-import colors from '../utils/colors';
+import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import Icon from './Icon'; // Import your custom Icon Component
 
 const Button = ({
-  title,
-  color = 'primary', // Default color palette ('primary', 'zinc', 'slate')
-  shade = 500, // Default shade
-  type = 'solid', // Button type: 'solid', 'outline', 'ghost'
-  size = 'md', // Button size: 'xl', 'md', 'sm', 'xs'
-  onPress,
-  disabled = false,
+  onPress, // Function to handle button press
+  text = '', // Button text (optional)
+  iconName = '', // Name of the icon from your Icon Component
+  iconPosition = 'left', // Position of the icon: 'left' or 'right'
+  iconSize, // Size of the icon (dynamic based on button size)
+  iconColor, // Color of the icon (dynamic based on button style)
+  size = 'md', // Button size: 'xs', 'sm', 'md', 'xl'
+  styleType = 'primary', // Style type: 'primary', 'secondary', 'disabled', etc.
+  buttonStyle, // Additional button styles
+  textStyle, // Additional text styles
+  disabled = false, // Disable button interaction
 }) => {
-  const sizeStyles = getSizeStyles(size);
+  const buttonSizes = {
+    xs: { paddingVertical: 5, paddingHorizontal: 10, fontSize: 12, iconSize: 16 },
+    sm: { paddingVertical: 8, paddingHorizontal: 15, fontSize: 14, iconSize: 18 },
+    md: { paddingVertical: 10, paddingHorizontal: 20, fontSize: 16, iconSize: 20 },
+    xl: { paddingVertical: 15, paddingHorizontal: 25, fontSize: 18, iconSize: 24 },
+  };
 
-  // Determine button styles based on type
-  const isSolid = type === 'solid';
-  const isOutline = type === 'outline';
+  const buttonStyles = {
+    primary: { backgroundColor: '#54408C', textColor: '#FFFFFF', iconColor: '#FFFFFF' },
+    secondary: { backgroundColor: '#F3F4F6', textColor: '#54408C', iconColor: '#54408C' },
+    disabled: { backgroundColor: '#D1D5DB', textColor: '#9CA3AF', iconColor: '#9CA3AF' },
+  };
+
+  const {
+    paddingVertical,
+    paddingHorizontal,
+    fontSize,
+    iconSize: defaultIconSize,
+  } = buttonSizes[size] || buttonSizes['md'];
+
+  const { backgroundColor, textColor, iconColor: defaultIconColor } =
+    buttonStyles[styleType] || buttonStyles['primary'];
 
   return (
     <TouchableOpacity
       style={[
         styles.button,
-        sizeStyles.button,
-        isSolid && {backgroundColor: colors[color][shade]},
-        isOutline && {
-          backgroundColor: 'transparent',
-          borderColor: colors[color][shade],
-          borderWidth: 2,
-        },
+        { paddingVertical, paddingHorizontal, backgroundColor },
         disabled && styles.disabledButton,
+        buttonStyle,
       ]}
       onPress={!disabled ? onPress : null}
-      disabled={disabled}>
-      <Text
-        style={[
-          styles.text,
-          sizeStyles.text,
-          isSolid && {color: colors.neutral.white},
-          (isOutline || type === 'ghost') && {color: colors[color][shade]},
-        ]}>
-        {title}
-      </Text>
+      activeOpacity={disabled ? 1 : 0.8}
+    >
+      {/* Icon on the Left */}
+      {iconName && iconPosition === 'left' && (
+        <Icon
+          name={iconName}
+          size={iconSize || defaultIconSize}
+          color={iconColor || defaultIconColor}
+          style={styles.icon}
+        />
+      )}
+
+      {/* Text */}
+      {text !== '' && (
+        <Text style={[styles.text, { fontSize, color: textColor }, textStyle]}>
+          {text}
+        </Text>
+      )}
+
+      {/* Icon on the Right */}
+      {iconName && iconPosition === 'right' && (
+        <Icon
+          name={iconName}
+          size={iconSize || defaultIconSize}
+          color={iconColor || defaultIconColor}
+          style={styles.icon}
+        />
+      )}
     </TouchableOpacity>
   );
 };
 
-// Define size-specific styles
-const getSizeStyles = size => {
-  switch (size) {
-    case 'xl':
-      return {
-        button: {
-          paddingVertical: 16,
-          paddingHorizontal: 25,
-        },
-        text: {
-          fontSize: 20,
-        },
-      };
-    case 'md':
-      return {
-        button: {
-          paddingVertical: 12,
-          paddingHorizontal: 20,
-        },
-        text: {
-          fontSize: 16,
-        },
-      };
-    case 'sm':
-      return {
-        button: {
-          paddingVertical: 8,
-          paddingHorizontal: 15,
-        },
-        text: {
-          fontSize: 14,
-        },
-      };
-    case 'xs':
-      return {
-        button: {
-          paddingVertical: 6,
-          paddingHorizontal: 10,
-        },
-        text: {
-          fontSize: 12,
-        },
-      };
-    default:
-      return {
-        button: {
-          paddingVertical: 12,
-          paddingHorizontal: 20,
-        },
-        text: {
-          fontSize: 16,
-        },
-      };
-  }
-};
-
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 8,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 8,
+    borderRadius: 8,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#54408C', // Primary color
   },
   text: {
     fontWeight: 'bold',
+  },
+  icon: {
+    marginHorizontal: 5,
   },
   disabledButton: {
     opacity: 0.6,

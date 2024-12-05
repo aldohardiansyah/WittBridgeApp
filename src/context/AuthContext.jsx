@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     // Simulate authentication
-    if (email === 'user@example.com' && password === 'password123') {
+    if (email === 'aldo@ibm.com' && password === 'password123') {
       setIsAuthenticated(true);
       return true;
     }

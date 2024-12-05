@@ -1,45 +1,122 @@
-import React from 'react';
-import {Text, View, StyleSheet, StatusBar} from 'react-native';
-import DashboardCard from '../../components/DashboardCard';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import MainContainer from '../../components/MainContainer';
 
-export default function FinancialScreen() {
-  return (
-    <View style={styles.container}>
-      <StatusBar
-        backgroundColor="transparent"
-        translucent={true}
-        barStyle="dark-content"
-      />
-      <View style={styles.widgetContainer}>
-        <View style={styles.widgetGreeting}>
-        <Text style={styles.widgetText}>Financial</Text>
-        </View>
-      </View>
-    </View>
+const FinancialScreen = () => {
+  const [totalBill, setTotalBill] = useState('');
+  const [numPeople, setNumPeople] = useState('');
+  const [splitAmount, setSplitAmount] = useState(null);
+
+  const calculateSplit = () => {
+    const bill = parseFloat(totalBill);
+    const people = parseInt(numPeople, 10);
+
+    if (isNaN(bill) || isNaN(people) || bill <= 0 || people <= 0) {
+      Alert.alert(
+        'Invalid Input',
+        'Please enter valid numbers for both fields.',
+      );
+      return;
+    }
+
+    const amount = (bill / people).toFixed(2); // Round to 2 decimal places
+    setSplitAmount(amount);
+  };
+
+  const headerContent = (
+    <Text style={{fontSize: 12}}>Split Bill</Text>
   );
-}
+
+  return (
+    <MainContainer headerTitle="Financial" headerContent={headerContent}>
+      <View style={styles.form}>
+        <Text style={styles.label}>Total Bill</Text>
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          placeholder="Enter total bill amount"
+          value={totalBill}
+          onChangeText={setTotalBill}
+        />
+
+        <Text style={styles.label}>Number of People</Text>
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          placeholder="Enter number of people"
+          value={numPeople}
+          onChangeText={setNumPeople}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={calculateSplit}>
+          <Text style={styles.buttonText}>Calculate Split</Text>
+        </TouchableOpacity>
+
+        {splitAmount !== null && (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultText}>Each Person Pays:</Text>
+            <Text style={styles.resultAmount}>${splitAmount}</Text>
+          </View>
+        )}
+      </View>
+    </MainContainer>
+  );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#e5e7eb',
+  form: {
+    marginTop: 20,
   },
-  widgetContainer: {
-    display:'flex',
-    alignItems:'center',
-    paddingTop: 80,
-    paddingHorizontal: 20,
-    backgroundColor: '#e5e7eb',
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#374151',
   },
-  widgetGreeting: {
-    width:'100%',
+  input: {
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontSize: 16,
+    marginBottom: 15,
+    backgroundColor: '#FFFFFF',
   },
-  widgetText: {
-    fontSize: 20,
-    fontWeight: 700,
+  button: {
+    backgroundColor: '#6A11CB',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  widgetSubText: {
-    fontSize: 15,
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  resultContainer: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: '#E5E7EB',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  resultText: {
+    fontSize: 16,
+    color: '#374151',
+  },
+  resultAmount: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#6A11CB',
+    marginTop: 10,
   },
 });
+
+export default FinancialScreen;
